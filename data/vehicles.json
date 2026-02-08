@@ -1,0 +1,250 @@
+[
+  {
+    "make": "Toyota",
+    "model": "Camry",
+    "year": 2019,
+    "price": 8500000,
+    "mileage": 45000,
+    "imageUrls": [
+      "https://images.unsplash.com/photo-1621007947382-bb3c3994e3fb?w=600&q=80",
+      "https://images.unsplash.com/photo-1580273916550-e323be2ae537?w=600&q=80"
+    ],
+    "slug": "toyota-camry-2019",
+    "stockId": "RM-2019-001",
+    "engine": "2.5L 4-Cylinder",
+    "transmission": "Automatic",
+    "fuelType": "Petrol",
+    "color": "Silver",
+    "vin": "4T1BF1FKXKU123456",
+    "engineCapacity": "2498cc",
+    "driveTrain": "FWD",
+    "description": "Well-maintained bank repossessed unit. Single owner, full service history. Interior in excellent condition. No accidents, clean title.",
+    "inspectionReport": {
+      "engine": "Pass",
+      "suspension": "Pass",
+      "brakes": "Pass",
+      "transmission": "Pass",
+      "electrical": "Pass",
+      "bodywork": "Pass"
+    },
+    "location": "Lagos, Nigeria",
+    "features": ["Air Conditioning", "Power Windows", "Cruise Control", "Bluetooth"]
+  },
+  {
+    "make": "Honda",
+    "model": "Accord",
+    "year": 2020,
+    "price": 9200000,
+    "mileage": 32000,
+    "imageUrls": [
+      "https://images.unsplash.com/photo-1618843479313-40f8afb4b4d8?w=600&q=80",
+      "https://images.unsplash.com/photo-1619767886558-efdc259cde1a?w=600&q=80"
+    ],
+    "slug": "honda-accord-2020",
+    "stockId": "RM-2020-002",
+    "engine": "1.5L Turbo 4-Cylinder",
+    "transmission": "CVT",
+    "fuelType": "Petrol",
+    "color": "Pearl White",
+    "vin": "1HGCV1F13LA123456",
+    "engineCapacity": "1498cc",
+    "driveTrain": "FWD",
+    "description": "Low mileage, certified pre-owned. Bank repossession with verified documentation. All maintenance up to date.",
+    "inspectionReport": {
+      "engine": "Pass",
+      "suspension": "Pass",
+      "brakes": "Pass",
+      "transmission": "Pass",
+      "electrical": "Pass",
+      "bodywork": "Pass"
+    },
+    "location": "Abuja, Nigeria",
+    "features": ["Leather Seats", "Sunroof", "Honda Sensing", "Apple CarPlay"]
+  },
+  {
+    "make": "Ford",
+    "model": "Explorer",
+    "year": 2018,
+    "price": 12500000,
+    "mileage": 78000,
+    "imageUrls": [
+      "https://images.unsplash.com/photo-1533473359331-0135ef1b58bf?w=600&q=80",
+      "https://images.unsplash.com/photo-1511919884226-fd3cad34687c?w=600&q=80"
+    ],
+    "slug": "ford-explorer-2018",
+    "stockId": "RM-2018-003",
+    "engine": "3.5L V6",
+    "transmission": "Automatic",
+    "fuelType": "Petrol",
+    "color": "Shadow Black",
+    "vin": "1FM5K8GC3JGA12345",
+    "engineCapacity": "3496cc",
+    "driveTrain": "AWD",
+    "description": "Spacious 7-seater SUV. Bank seized unit, ready for immediate transfer. Strong engine, ideal for family use.",
+    "inspectionReport": {
+      "engine": "Pass",
+      "suspension": "Pass",
+      "brakes": "Pass",
+      "transmission": "Pass",
+      "electrical": "Pass",
+      "bodywork": "Minor wear"
+    },
+    "location": "Port Harcourt, Nigeria",
+    "features": ["7 Seats", "Third Row", "4WD", "Backup Camera"]
+  },
+  {
+    "make": "Toyota",
+    "model": "Land Cruiser",
+    "year": 2017,
+    "price": 22000000,
+    "mileage": 125000,
+    "imageUrls": [
+      "https://images.unsplash.com/photo-1519641471654-76ce0107ad1b?w=600&q=80",
+      "https://images.unsplash.com/photo-1609521263047-f8f205293f24?w=600&q=80"
+    ],
+    "slug": "toyota-land-cruiser-2017",
+    "stockId": "RM-2017-004",
+    "engine": "4.6L V8",
+    "transmission": "Automatic",
+    "fuelType": "Petrol",
+    "color": "Midnight Blue",
+    "vin": "JTMCY7AJ5H4123456",
+    "engineCapacity": "4608cc",
+    "driveTrain": "4WD",
+    "description": "Legendary reliability. Bank repossessed luxury SUV. Full leather interior, navigation, dual zone AC.",
+    "inspectionReport": {
+      "engine": "Pass",
+      "suspension": "Pass",
+      "brakes": "Pass",
+      "transmission": "Pass",
+      "electrical": "Pass",
+      "bodywork": "Pass"
+    },
+    "location": "Lagos, Nigeria",
+    "features": ["4WD", "Leather", "Navigation", "Third Row", "Tow Package"]
+  },
+  {
+    "make": "Mercedes-Benz",
+    "model": "C-Class",
+    "year": 2021,
+    "price": 18500000,
+    "mileage": 18000,
+    "imageUrls": [
+      "https://images.unsplash.com/photo-1617814076367-b759c7d7e738?w=600&q=80",
+      "https://images.unsplash.com/photo-1606016159991-dfe4f2746ad5?w=600&q=80"
+    ],
+    "slug": "mercedes-c-class-2021",
+    "stockId": "RM-2021-005",
+    "engine": "2.0L Turbo 4-Cylinder",
+    "transmission": "9G-Tronic Automatic",
+    "fuelType": "Petrol",
+    "color": "Obsidian Black",
+    "vin": "55SWF4KB3MU123456",
+    "engineCapacity": "1991cc",
+    "driveTrain": "RWD",
+    "description": "Near-new condition. Bank repossession with minimal mileage. Premium build, exceptional driving experience.",
+    "inspectionReport": {
+      "engine": "Pass",
+      "suspension": "Pass",
+      "brakes": "Pass",
+      "transmission": "Pass",
+      "electrical": "Pass",
+      "bodywork": "Pass"
+    },
+    "location": "Lagos, Nigeria",
+    "features": ["MBUX", "Leather", "Sunroof", "LED Lights", "Keyless Go"]
+  },
+  {
+    "make": "BMW",
+    "model": "3 Series",
+    "year": 2019,
+    "price": 14200000,
+    "mileage": 52000,
+    "imageUrls": [
+      "https://images.unsplash.com/photo-1555215695-3004980ad54e?w=600&q=80",
+      "https://images.unsplash.com/photo-1617531653332-bd46c24f2068?w=600&q=80"
+    ],
+    "slug": "bmw-3-series-2019",
+    "stockId": "RM-2019-006",
+    "engine": "2.0L Turbo 4-Cylinder",
+    "transmission": "8-Speed Automatic",
+    "fuelType": "Petrol",
+    "color": "Alpine White",
+    "vin": "WBA8E9C59LKA12345",
+    "engineCapacity": "1998cc",
+    "driveTrain": "RWD",
+    "description": "Sport sedan with strong performance. Bank repossessed, clean title. iDrive infotainment, sport package.",
+    "inspectionReport": {
+      "engine": "Pass",
+      "suspension": "Pass",
+      "brakes": "Pass",
+      "transmission": "Pass",
+      "electrical": "Pass",
+      "bodywork": "Pass"
+    },
+    "location": "Abuja, Nigeria",
+    "features": ["iDrive", "Sport Package", "Heated Seats", "Parking Sensors"]
+  },
+  {
+    "make": "Toyota",
+    "model": "Corolla",
+    "year": 2020,
+    "price": 6800000,
+    "mileage": 28000,
+    "imageUrls": [
+      "https://images.unsplash.com/photo-1621007947382-bb3c3994e3fb?w=600&q=80",
+      "https://images.unsplash.com/photo-1580273916550-e323be2ae537?w=600&q=80"
+    ],
+    "slug": "toyota-corolla-2020",
+    "stockId": "RM-2020-007",
+    "engine": "1.8L 4-Cylinder",
+    "transmission": "CVT",
+    "fuelType": "Petrol",
+    "color": "Celestial Silver",
+    "vin": "2T1BURHE5LC123456",
+    "engineCapacity": "1798cc",
+    "driveTrain": "FWD",
+    "description": "Economical and reliable. Perfect first car or daily driver. Bank seized, quick transfer available.",
+    "inspectionReport": {
+      "engine": "Pass",
+      "suspension": "Pass",
+      "brakes": "Pass",
+      "transmission": "Pass",
+      "electrical": "Pass",
+      "bodywork": "Pass"
+    },
+    "location": "Lagos, Nigeria",
+    "features": ["Air Conditioning", "Power Windows", "Toyota Safety Sense"]
+  },
+  {
+    "make": "Honda",
+    "model": "CR-V",
+    "year": 2019,
+    "price": 11200000,
+    "mileage": 65000,
+    "imageUrls": [
+      "https://images.unsplash.com/photo-1533473359331-0135ef1b58bf?w=600&q=80",
+      "https://images.unsplash.com/photo-1511919884226-fd3cad34687c?w=600&q=80"
+    ],
+    "slug": "honda-cr-v-2019",
+    "stockId": "RM-2019-008",
+    "engine": "1.5L Turbo 4-Cylinder",
+    "transmission": "CVT",
+    "fuelType": "Petrol",
+    "color": "Platinum White",
+    "vin": "2HKRW2H86KH123456",
+    "engineCapacity": "1498cc",
+    "driveTrain": "AWD",
+    "description": "Versatile compact SUV. Bank repossessed with solid service history. Honda Sensing safety suite included.",
+    "inspectionReport": {
+      "engine": "Pass",
+      "suspension": "Pass",
+      "brakes": "Pass",
+      "transmission": "Pass",
+      "electrical": "Pass",
+      "bodywork": "Pass"
+    },
+    "location": "Ibadan, Nigeria",
+    "features": ["Honda Sensing", "Sunroof", "Power Tailgate", "Apple CarPlay"]
+  }
+]
