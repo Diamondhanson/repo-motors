@@ -93,9 +93,16 @@ export function InventoryCard({ vehicle }: InventoryCardProps) {
           </div>
 
           <div className="mt-4 flex flex-col items-start gap-3 lg:mt-0 lg:items-end">
-            <p className="text-xl font-bold text-[var(--color-accent)]">
-              {formatPrice(price)}
-            </p>
+            <div className="text-right">
+              <p className="text-xl font-bold text-[var(--color-accent)]">
+                {formatPrice(price)}
+              </p>
+              {vehicle.downPayment && vehicle.downPayment > 0 && (
+                <p className="mt-1 text-xs font-bold text-[var(--color-accent)]">
+                  Down Payment: {formatPrice(vehicle.downPayment)}
+                </p>
+              )}
+            </div>
             <div className="flex flex-wrap gap-2">
               <Link
                 href={getInterestContactUrl({ year, make, model, stockId: vehicle.stockId, slug })}

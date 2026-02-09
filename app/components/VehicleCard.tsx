@@ -10,6 +10,7 @@ export interface VehicleCardProps {
   model: string;
   year: number;
   price: number;
+  downPayment?: number;
   imageUrls: string[];
   slug: string;
 }
@@ -26,6 +27,7 @@ export function VehicleCard({
   model,
   year,
   price,
+  downPayment,
   imageUrls,
   slug,
 }: VehicleCardProps) {
@@ -75,9 +77,16 @@ export function VehicleCard({
         <p className="mt-1 text-sm text-[var(--color-primary)] opacity-80">
           {year}
         </p>
-        <p className="mt-2 text-lg font-bold text-[var(--color-accent)]">
-          {formatPrice(price)}
-        </p>
+        <div className="mt-2">
+          <p className="text-lg font-bold text-[var(--color-accent)]">
+            {formatPrice(price)}
+          </p>
+          {downPayment && downPayment > 0 && (
+            <p className="mt-1 text-xs font-bold text-[var(--color-accent)]">
+              Down Payment: {formatPrice(downPayment)}
+            </p>
+          )}
+        </div>
         <div className="mt-3 rounded border border-[var(--color-border)] bg-[var(--color-background)] px-3 py-2">
           <p className="text-xs font-medium text-[var(--color-primary)] opacity-80">
             Vehicle Inspection Reports

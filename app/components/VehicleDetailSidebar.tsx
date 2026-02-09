@@ -44,6 +44,11 @@ export function VehicleDetailSidebar({ vehicle }: VehicleDetailSidebarProps) {
         <p className="text-3xl font-bold text-[var(--color-accent)]">
           {formatPrice(vehicle.price)}
         </p>
+        {vehicle.downPayment && vehicle.downPayment > 0 && (
+          <p className="mt-1 text-sm font-bold text-[var(--color-accent)]">
+            Down Payment: {formatPrice(vehicle.downPayment)}
+          </p>
+        )}
         <p className="mt-1 text-sm text-[var(--color-primary)] opacity-80">
           Stock #{vehicle.stockId}
         </p>
