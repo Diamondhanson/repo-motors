@@ -16,7 +16,12 @@ export async function GET(request: Request) {
 
   try {
     const vehicles = await getVehicles();
-    return NextResponse.json(vehicles);
+    const response = NextResponse.json(vehicles);
+    response.headers.set(
+      "Cache-Control",
+      "public, s-maxage=60, stale-while-revalidate=120"
+    );
+    return response;
   } catch (err) {
     console.error(err);
     return NextResponse.json(

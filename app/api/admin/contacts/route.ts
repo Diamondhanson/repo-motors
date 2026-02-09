@@ -15,7 +15,12 @@ export async function GET(request: Request) {
 
   try {
     const contacts = await getContacts();
-    return NextResponse.json(contacts);
+    const response = NextResponse.json(contacts);
+    response.headers.set(
+      "Cache-Control",
+      "private, no-cache, must-revalidate"
+    );
+    return response;
   } catch (err) {
     console.error(err);
     return NextResponse.json(

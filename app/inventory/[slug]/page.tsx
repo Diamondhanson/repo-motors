@@ -9,6 +9,8 @@ import { VehicleBigSpecs } from "../../components/VehicleBigSpecs";
 import { VehicleDetailTabs } from "../../components/VehicleDetailTabs";
 import { VehicleInspectionReport } from "../../components/VehicleInspectionReport";
 
+export const revalidate = 3600; // Revalidate every hour (ISR)
+
 export async function generateMetadata({
   params,
 }: {

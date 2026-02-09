@@ -3,6 +3,8 @@ import { getVehicles } from "@/app/data/inventory";
 import { getFilterOptions } from "@/app/lib/services/vehicles";
 import { InventoryContent } from "./InventoryContent";
 
+export const revalidate = 600; // Revalidate every 10 minutes (ISR)
+
 export default async function InventoryPage() {
   const [vehicles, filterOptions] = await Promise.all([
     getVehicles(),

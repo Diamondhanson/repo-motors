@@ -8,6 +8,8 @@ import { RevealOnScroll } from "./components/RevealOnScroll";
 import { getVehicles } from "./data/inventory";
 import { getFilterOptions } from "./lib/services/vehicles";
 
+export const revalidate = 600; // Revalidate every 10 minutes (ISR)
+
 export const metadata: Metadata = {
   title: "Fairly Used & Bank Repossessed Cars - Repo Motors",
   description:
