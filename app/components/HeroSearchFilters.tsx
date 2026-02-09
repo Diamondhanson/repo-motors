@@ -3,18 +3,23 @@
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import type { FilterOptions } from "../lib/services/vehicles";
 
-const makes = ["All Makes", "Toyota", "Honda", "Ford", "BMW", "Mercedes-Benz"];
-const models = ["All Models", "Camry", "Accord", "F-150", "3 Series", "C-Class"];
 const priceRanges = [
   { label: "Any Price", min: "", max: "" },
-  { label: "Under ₦5M", min: "0", max: "5000000" },
-  { label: "₦5M - ₦10M", min: "5000000", max: "10000000" },
-  { label: "₦10M - ₦20M", min: "10000000", max: "20000000" },
-  { label: "Over ₦20M", min: "20000000", max: "" },
+  { label: "Under $5K", min: "0", max: "5000" },
+  { label: "$5K - $10K", min: "5000", max: "10000" },
+  { label: "$10K - $20K", min: "10000", max: "20000" },
+  { label: "Over $20K", min: "20000", max: "" },
 ];
 
-export function HeroSearchFilters() {
+interface HeroSearchFiltersProps {
+  filterOptions: FilterOptions;
+}
+
+export function HeroSearchFilters({ filterOptions }: HeroSearchFiltersProps) {
+  const makes = ["All Makes", ...filterOptions.makes];
+  const models = ["All Models", ...filterOptions.models];
   const router = useRouter();
   const [make, setMake] = useState("All Makes");
   const [model, setModel] = useState("All Models");

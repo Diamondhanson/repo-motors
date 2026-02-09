@@ -6,6 +6,7 @@ import { HeroSlidingBackground } from "./components/HeroSlidingBackground";
 import { VehicleCard } from "./components/VehicleCard";
 import { RevealOnScroll } from "./components/RevealOnScroll";
 import { getVehicles } from "./data/inventory";
+import { getFilterOptions } from "./lib/services/vehicles";
 
 export const metadata: Metadata = {
   title: "Fairly Used & Bank Repossessed Cars - Repo Motors",
@@ -104,7 +105,10 @@ const howItWorksSteps = [
 ];
 
 export default async function Home() {
-  const vehicles = await getVehicles();
+  const [vehicles, filterOptions] = await Promise.all([
+    getVehicles(),
+    getFilterOptions(),
+  ]);
   const featuredVehicles = vehicles.slice(0, 6);
 
   return (
@@ -127,7 +131,7 @@ export default async function Home() {
                 repossessed cars at transparent, fixed prices. Used cars for
                 sale—no auctions, just affordable cars you can trust.
               </p>
-              <HeroSearchFilters />
+              <HeroSearchFilters filterOptions={filterOptions} />
             </RevealOnScroll>
           </div>
         </section>

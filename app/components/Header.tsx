@@ -7,7 +7,6 @@ const navLinks = [
   { href: "/", label: "Home" },
   { href: "/inventory", label: "Inventory" },
   { href: "/how-to-buy", label: "How to Buy" },
-  { href: "/contact", label: "Contact" },
 ];
 
 export function Header() {

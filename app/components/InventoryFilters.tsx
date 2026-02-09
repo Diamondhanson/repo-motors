@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback } from "react";
+import type { FilterOptions } from "@/app/lib/services/vehicles";
 
 export interface FilterState {
   search: string;
@@ -13,23 +14,26 @@ export interface FilterState {
   maxMileage: number;
 }
 
-const MAKES = ["Toyota", "Honda", "Ford", "BMW", "Mercedes-Benz"];
-const YEARS = Array.from({ length: 15 }, (_, i) => 2011 + i).reverse();
-const PRICE_MAX = 25_000_000;
-const MILEAGE_MAX = 200_000;
-
 interface InventoryFiltersProps {
   filters: FilterState;
   onChange: (filters: FilterState) => void;
   onApply?: () => void;
+  onReset?: () => void;
   compact?: boolean;
+  filterOptions: FilterOptions;
+}
+
+function rangeKey(min: number, max: number) {
+  return `${min}-${max}`;
 }
 
 export function InventoryFilters({
   filters,
   onChange,
   onApply,
+  onReset,
   compact = false,
+  filterOptions,
 }: InventoryFiltersProps) {
   const update = useCallback(
     (updates: Partial<FilterState>) => {
@@ -37,6 +41,9 @@ export function InventoryFilters({
     },
     [filters, onChange]
   );
+
+  const selectedPriceKey = rangeKey(filters.minPrice, filters.maxPrice);
+  const selectedMileageKey = rangeKey(filters.minMileage, filters.maxMileage);
 
   const toggleMake = (make: string) => {
     const makes = filters.makes.includes(make)
@@ -47,6 +54,16 @@ export function InventoryFilters({
 
   return (
     <div className="flex flex-col gap-6">
+      {onReset && (
+        <button
+          type="button"
+          onClick={onReset}
+          className="rounded-[var(--radius-button)] border border-[var(--color-border)] px-4 py-2 text-sm font-medium text-[var(--color-primary)] hover:bg-[var(--color-border)]"
+          style={{ borderColor: "var(--color-border)" }}
+        >
+          Reset Filters
+        </button>
+      )}
       <div>
         <label
           htmlFor="inventory-search"
@@ -70,7 +87,7 @@ export function InventoryFilters({
           Make / Model
         </p>
         <div className="flex flex-col gap-2">
-          {MAKES.map((make) => (
+          {filterOptions.makes.map((make) => (
             <label
               key={make}
               className="flex cursor-pointer items-center gap-2 text-sm text-[var(--color-primary)]"
@@ -104,7 +121,7 @@ export function InventoryFilters({
               }
               className="w-full rounded-[var(--radius-button)] border border-[var(--color-border)] bg-white px-3 py-2 text-sm text-[var(--color-primary)] focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)]"
             >
-              {YEARS.map((y) => (
+              {filterOptions.years.map((y) => (
                 <option key={y} value={y}>
                   {y}
                 </option>
@@ -123,7 +140,7 @@ export function InventoryFilters({
               }
               className="w-full rounded-[var(--radius-button)] border border-[var(--color-border)] bg-white px-3 py-2 text-sm text-[var(--color-primary)] focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)]"
             >
-              {YEARS.map((y) => (
+              {filterOptions.years.map((y) => (
                 <option key={y} value={y}>
                   {y}
                 </option>
@@ -134,83 +151,67 @@ export function InventoryFilters({
       </div>
 
       <div>
-        <p className="mb-2 text-sm font-medium text-[var(--color-primary)]">
-          Price (₦) {filters.minPrice > 0 || filters.maxPrice < PRICE_MAX ? `— ₦${(filters.minPrice / 1_000_000).toFixed(1)}M - ₦${(filters.maxPrice / 1_000_000).toFixed(1)}M` : ""}
-        </p>
-        <div className="flex flex-col gap-2">
-          <input
-            type="range"
-            min={0}
-            max={PRICE_MAX}
-            step={500_000}
-            value={filters.minPrice}
-            onChange={(e) =>
-              update({
-                minPrice: Math.min(
-                  Number(e.target.value),
-                  filters.maxPrice - 500_000
-                ),
-              })
+        <label
+          htmlFor="price-filter"
+          className="mb-1 block text-sm font-medium text-[var(--color-primary)]"
+        >
+          Price
+        </label>
+        <select
+          id="price-filter"
+          value={
+            filterOptions.priceRanges.find(
+              (r) => rangeKey(r.min, r.max) === selectedPriceKey
+            )?.label ?? filterOptions.priceRanges[0]?.label ?? "Any Price"
+          }
+          onChange={(e) => {
+            const range = filterOptions.priceRanges.find(
+              (r) => r.label === e.target.value
+            );
+            if (range) {
+              update({ minPrice: range.min, maxPrice: range.max });
             }
-            className="w-full accent-[var(--color-primary)]"
-          />
-          <input
-            type="range"
-            min={0}
-            max={PRICE_MAX}
-            step={500_000}
-            value={filters.maxPrice}
-            onChange={(e) =>
-              update({
-                maxPrice: Math.max(
-                  Number(e.target.value),
-                  filters.minPrice + 500_000
-                ),
-              })
-            }
-            className="w-full accent-[var(--color-primary)]"
-          />
-        </div>
+          }}
+          className="w-full rounded-[var(--radius-button)] border border-[var(--color-border)] bg-white px-3 py-2 text-sm text-[var(--color-primary)] focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)]"
+        >
+          {filterOptions.priceRanges.map((r) => (
+            <option key={rangeKey(r.min, r.max)} value={r.label}>
+              {r.label}
+            </option>
+          ))}
+        </select>
       </div>
 
       <div>
-        <p className="mb-2 text-sm font-medium text-[var(--color-primary)]">
-          Mileage (km) {filters.minMileage > 0 || filters.maxMileage < MILEAGE_MAX ? `— ${(filters.minMileage / 1000).toFixed(0)}k - ${(filters.maxMileage / 1000).toFixed(0)}k` : ""}
-        </p>
-        <div className="flex flex-col gap-2">
-          <input
-            type="range"
-            min={0}
-            max={MILEAGE_MAX}
-            step={10000}
-            value={filters.minMileage}
-            onChange={(e) =>
-              update({
-                minMileage: Math.min(
-                  Number(e.target.value),
-                  filters.maxMileage - 10000
-                ),
-              })
+        <label
+          htmlFor="mileage-filter"
+          className="mb-1 block text-sm font-medium text-[var(--color-primary)]"
+        >
+          Mileage
+        </label>
+        <select
+          id="mileage-filter"
+          value={
+            filterOptions.mileageRanges.find(
+              (r) => rangeKey(r.min, r.max) === selectedMileageKey
+            )?.label ?? filterOptions.mileageRanges[0]?.label ?? "Any Mileage"
+          }
+          onChange={(e) => {
+            const range = filterOptions.mileageRanges.find(
+              (r) => r.label === e.target.value
+            );
+            if (range) {
+              update({ minMileage: range.min, maxMileage: range.max });
             }
-            className="w-full accent-[var(--color-primary)]"
-          />
-          <input
-            type="range"
-            min={0}
-            max={MILEAGE_MAX}
-            step={10000}
-            value={filters.maxMileage}
-            onChange={(e) =>
-              update({
-                maxMileage: Math.max(
-                  Number(e.target.value),
-                  filters.minMileage + 10000
-                ),
-              })
-            }
-            className="w-full accent-[var(--color-primary)]"
-          />
-        </div>
+          }}
+          className="w-full rounded-[var(--radius-button)] border border-[var(--color-border)] bg-white px-3 py-2 text-sm text-[var(--color-primary)] focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)]"
+        >
+          {filterOptions.mileageRanges.map((r) => (
+            <option key={rangeKey(r.min, r.max)} value={r.label}>
+              {r.label}
+            </option>
+          ))}
+        </select>
       </div>
 
       {compact && onApply && (

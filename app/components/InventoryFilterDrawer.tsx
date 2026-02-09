@@ -3,12 +3,15 @@
 import { useEffect } from "react";
 import { InventoryFilters } from "./InventoryFilters";
 import type { FilterState } from "./InventoryFilters";
+import type { FilterOptions } from "@/app/lib/services/vehicles";
 
 interface InventoryFilterDrawerProps {
   isOpen: boolean;
   onClose: () => void;
   filters: FilterState;
   onChange: (filters: FilterState) => void;
+  onReset?: () => void;
+  filterOptions: FilterOptions;
 }
 
 export function InventoryFilterDrawer({
@@ -16,6 +19,8 @@ export function InventoryFilterDrawer({
   onClose,
   filters,
   onChange,
+  onReset,
+  filterOptions,
 }: InventoryFilterDrawerProps) {
   useEffect(() => {
     if (isOpen) {
@@ -71,7 +76,9 @@ export function InventoryFilterDrawer({
           filters={filters}
           onChange={onChange}
           onApply={onClose}
+          onReset={onReset ? () => { onReset(); onClose(); } : undefined}
           compact
+          filterOptions={filterOptions}
         />
       </aside>
     </>

@@ -16,7 +16,7 @@ export default function ContactPage({
 }) {
   return (
     <main className="min-h-screen bg-[var(--color-background)]">
-      <div className="mx-auto max-w-3xl px-4 py-12 md:px-6 lg:px-8">
+      <div className="mx-auto max-w-3xl px-4 py-12 md:max-w-4xl md:px-6 lg:max-w-5xl xl:max-w-6xl lg:px-8">
         <h1 className="text-3xl font-bold text-[var(--color-primary)] md:text-4xl">
           Contact Us
         </h1>

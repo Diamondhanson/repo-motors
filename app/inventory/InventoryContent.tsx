@@ -6,27 +6,45 @@ import type { InventoryVehicle } from "@/app/data/inventory";
 import { InventoryFilters, type FilterState } from "../components/InventoryFilters";
 import { InventoryFilterDrawer } from "../components/InventoryFilterDrawer";
 import { InventoryCard } from "../components/InventoryCard";
+import type { FilterOptions } from "@/app/lib/services/vehicles";
 
-const DEFAULT_FILTERS: FilterState = {
-  search: "",
-  makes: [],
-  minYear: 2011,
-  maxYear: 2025,
-  minPrice: 0,
-  maxPrice: 25_000_000,
-  minMileage: 0,
-  maxMileage: 200_000,
-};
+function getDefaultFilters(filterOptions: FilterOptions): FilterState {
+  const anyPrice = filterOptions.priceRanges[0];
+  const anyMileage = filterOptions.mileageRanges[0];
+  const minYear =
+    filterOptions.years.length > 0
+      ? Math.min(...filterOptions.years)
+      : 2011;
+  const maxYear =
+    filterOptions.years.length > 0
+      ? Math.max(...filterOptions.years)
+      : 2025;
+  return {
+    search: "",
+    makes: [],
+    minYear,
+    maxYear,
+    minPrice: anyPrice?.min ?? 0,
+    maxPrice: anyPrice?.max ?? 100_000,
+    minMileage: anyMileage?.min ?? 0,
+    maxMileage: anyMileage?.max ?? 200_000,
+  };
+}
 
 type SortOption = "price-asc" | "price-desc" | "newest";
 
 interface InventoryContentProps {
   vehicles: InventoryVehicle[];
+  filterOptions: FilterOptions;
 }
 
-export function InventoryContent({ vehicles }: InventoryContentProps) {
+export function InventoryContent({ vehicles, filterOptions }: InventoryContentProps) {
   const searchParams = useSearchParams();
-  const [filters, setFilters] = useState<FilterState>(DEFAULT_FILTERS);
+  const defaultFilters = useMemo(
+    () => getDefaultFilters(filterOptions),
+    [filterOptions]
+  );
+  const [filters, setFilters] = useState<FilterState>(defaultFilters);
   const [sort, setSort] = useState<SortOption>("price-asc");
   const [drawerOpen, setDrawerOpen] = useState(false);
 
@@ -100,7 +118,12 @@ export function InventoryContent({ vehicles }: InventoryContentProps) {
               <h2 className="mb-4 text-sm font-bold uppercase tracking-wide text-[var(--color-primary)]">
                 Filters
               </h2>
-              <InventoryFilters filters={filters} onChange={setFilters} />
+              <InventoryFilters
+                filters={filters}
+                onChange={setFilters}
+                onReset={() => setFilters(defaultFilters)}
+                filterOptions={filterOptions}
+              />
             </div>
 
             <button
@@ -173,6 +196,8 @@ export function InventoryContent({ vehicles }: InventoryContentProps) {
         onClose={() => setDrawerOpen(false)}
         filters={filters}
         onChange={setFilters}
+        onReset={() => setFilters(defaultFilters)}
+        filterOptions={filterOptions}
       />
     </main>
   );

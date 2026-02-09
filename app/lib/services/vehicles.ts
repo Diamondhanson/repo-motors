@@ -1,6 +1,26 @@
 import { supabaseServer } from "../supabase/server";
 import type { Vehicle } from "../types";
 
+export interface PriceRange {
+  label: string;
+  min: number;
+  max: number;
+}
+
+export interface MileageRange {
+  label: string;
+  min: number;
+  max: number;
+}
+
+export interface FilterOptions {
+  makes: string[];
+  models: string[];
+  years: number[];
+  priceRanges: PriceRange[];
+  mileageRanges: MileageRange[];
+}
+
 // Transform snake_case database fields to camelCase TypeScript
 function dbToVehicle(dbRow: any): Vehicle {
   return {
@@ -159,4 +179,83 @@ export async function deleteVehicle(slug: string): Promise<boolean> {
   }
 
   return true;
+}
+
+const PRICE_MAX = 100_000;
+const MILEAGE_MAX = 200_000;
+
+const PRICE_BUCKETS: PriceRange[] = [
+  { label: "Any Price", min: 0, max: PRICE_MAX },
+  { label: "Under $5K", min: 0, max: 5_000 },
+  { label: "$5K - $10K", min: 5_000, max: 10_000 },
+  { label: "$10K - $20K", min: 10_000, max: 20_000 },
+  { label: "$20K - $30K", min: 20_000, max: 30_000 },
+  { label: "Over $30K", min: 30_000, max: PRICE_MAX },
+];
+
+const MILEAGE_BUCKETS: MileageRange[] = [
+  { label: "Any Mileage", min: 0, max: MILEAGE_MAX },
+  { label: "Under 50k km", min: 0, max: 50_000 },
+  { label: "50k - 100k km", min: 50_000, max: 100_000 },
+  { label: "100k - 150k km", min: 100_000, max: 150_000 },
+  { label: "150k - 200k km", min: 150_000, max: 200_000 },
+  { label: "Over 200k km", min: 200_000, max: MILEAGE_MAX },
+];
+
+export async function getFilterOptions(): Promise<FilterOptions> {
+  const { data, error } = await supabaseServer
+    .from("vehicles")
+    .select("make, model, year, price, mileage");
+
+  if (error) {
+    console.error("Error fetching filter options:", error);
+    return {
+      makes: [],
+      models: [],
+      years: [],
+      priceRanges: PRICE_BUCKETS,
+      mileageRanges: MILEAGE_BUCKETS,
+    };
+  }
+
+  if (!data || data.length === 0) {
+    const fallbackYears = Array.from(
+      { length: 15 },
+      (_, i) => new Date().getFullYear() - i
+    );
+    return {
+      makes: [],
+      models: [],
+      years: fallbackYears,
+      priceRanges: PRICE_BUCKETS,
+      mileageRanges: MILEAGE_BUCKETS,
+    };
+  }
+
+  // Extract unique values
+  const makes = [...new Set(data.map((v) => v.make))].sort();
+  const models = [...new Set(data.map((v) => v.model))].sort();
+  const years = [...new Set(data.map((v) => v.year))].sort((a, b) => b - a);
+
+  // Filter price/mileage buckets to those overlapping with actual data
+  const minPrice = Math.min(...data.map((v) => Number(v.price)));
+  const maxPrice = Math.max(...data.map((v) => Number(v.price)));
+  const minMileage = Math.min(...data.map((v) => Number(v.mileage)));
+  const maxMileage = Math.max(...data.map((v) => Number(v.mileage)));
+
+  const filteredPriceBuckets = PRICE_BUCKETS.filter(
+    (b) => b.label === "Any Price" || (b.max > minPrice && b.min < maxPrice)
+  );
+  const filteredMileageBuckets = MILEAGE_BUCKETS.filter(
+    (b) =>
+      b.label === "Any Mileage" || (b.max > minMileage && b.min < maxMileage)
+  );
+
+  return {
+    makes,
+    models,
+    years,
+    priceRanges: filteredPriceBuckets,
+    mileageRanges: filteredMileageBuckets,
+  };
 }

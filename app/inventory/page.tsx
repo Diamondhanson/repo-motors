@@ -1,9 +1,13 @@
 import { Suspense } from "react";
 import { getVehicles } from "@/app/data/inventory";
+import { getFilterOptions } from "@/app/lib/services/vehicles";
 import { InventoryContent } from "./InventoryContent";
 
 export default async function InventoryPage() {
-  const vehicles = await getVehicles();
+  const [vehicles, filterOptions] = await Promise.all([
+    getVehicles(),
+    getFilterOptions(),
+  ]);
 
   return (
     <Suspense
@@ -15,7 +19,7 @@ export default async function InventoryPage() {
         </main>
       }
     >
-      <InventoryContent vehicles={vehicles} />
+      <InventoryContent vehicles={vehicles} filterOptions={filterOptions} />
     </Suspense>
   );
 }
