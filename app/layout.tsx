@@ -14,6 +14,10 @@ const inter = Inter({
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://repomotors.com"),
+  icons: {
+    icon: "/images/logo.png",
+    apple: "/images/logo.png",
+  },
   title: {
     default: "Repo Motors - Bank Repossessed & Fairly Used Cars",
     template: "%s | Repo Motors",

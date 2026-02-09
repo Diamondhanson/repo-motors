@@ -1,4 +1,4 @@
-import { WHATSAPP_NUMBER, TIKTOK_USERNAME } from "../lib/contact";
+import { WHATSAPP_NUMBER, TIKTOK_URL } from "../lib/contact";
 
 function WhatsAppIcon() {
   return (
@@ -28,7 +28,7 @@ function TikTokIcon() {
 
 export function ContactSocialLinks() {
   const whatsappUrl = `https://wa.me/${WHATSAPP_NUMBER}`;
-  const tiktokUrl = `https://www.tiktok.com/@${TIKTOK_USERNAME}`;
+  const tiktokUrl = TIKTOK_URL;
 
   return (
     <div className="rounded-[var(--radius-card)] border border-[var(--color-border)] bg-[#f5f2ed] p-6">

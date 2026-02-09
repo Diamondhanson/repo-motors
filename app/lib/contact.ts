@@ -1,6 +1,7 @@
 export const CONTACT_EMAIL = "info@repomotors.com";
-export const WHATSAPP_NUMBER = "2348012345678";
-export const TIKTOK_USERNAME = "repomotors";
+export const WHATSAPP_NUMBER = "17162953868";
+export const TIKTOK_URL =
+  "https://www.tiktok.com/@bankseizedcarsusa4?_r=1&_t=ZT-93lvgwa6pA6";
 
 function buildContactUrl(
   type: "interest" | "inspection",

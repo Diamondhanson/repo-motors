@@ -13,6 +13,17 @@ const INSPECTION_FIELDS: (keyof InspectionReport)[] = [
   "bodywork",
 ];
 
+const INSPECTION_OPTIONS = [
+  "Pass",
+  "Fail",
+  "Good",
+  "Fair",
+  "Poor",
+  "Needs Attention",
+  "Excellent",
+  "Not Inspected",
+];
+
 const defaultInspection: InspectionReport = {
   engine: "",
   suspension: "",
@@ -583,9 +594,8 @@ export function ProductForm({
               >
                 {key.charAt(0).toUpperCase() + key.slice(1)}
               </label>
-              <input
+              <select
                 id={`insp-${key}`}
-                type="text"
                 value={form.inspectionReport[key] ?? ""}
                 onChange={(e) =>
                   setForm((p) => ({
@@ -597,8 +607,14 @@ export function ProductForm({
                   }))
                 }
                 className={inputClass}
-                placeholder="Pass / Fail / etc"
-              />
+              >
+                <option value="">Select status...</option>
+                {INSPECTION_OPTIONS.map((option) => (
+                  <option key={option} value={option}>
+                    {option}
+                  </option>
+                ))}
+              </select>
             </div>
           ))}
         </div>
