@@ -2,7 +2,6 @@
 
 import { useState, useEffect } from "react";
 import type { Vehicle, InspectionReport } from "@/app/lib/types";
-import { supabase } from "@/app/lib/supabase/client";
 
 const INSPECTION_FIELDS: (keyof InspectionReport)[] = [
   "engine",
@@ -140,21 +139,20 @@ export function ProductForm({
     });
 
     try {
-      const fileExt = file.name.split(".").pop();
-      const fileName = `${Date.now()}-${Math.random().toString(36).substring(7)}.${fileExt}`;
-      const filePath = `${fileName}`;
+      const formData = new FormData();
+      formData.append("file", file);
 
-      const { error } = await supabase.storage
-        .from("vehicle-images")
-        .upload(filePath, file);
+      const res = await fetch("/api/admin/vehicle-images", {
+        method: "POST",
+        body: formData,
+        credentials: "include",
+      });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) {
+        throw new Error(data.error || "Upload failed");
+      }
 
-      if (error) throw error;
-
-      const { data: { publicUrl } } = supabase.storage
-        .from("vehicle-images")
-        .getPublicUrl(filePath);
-
-      updateImage(index, publicUrl);
+      updateImage(index, data.publicUrl);
     } catch (error) {
       console.error("Upload error:", error);
       alert("Failed to upload image. Make sure the storage bucket is created in Supabase.");
