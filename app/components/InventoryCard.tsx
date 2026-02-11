@@ -82,14 +82,7 @@ export function InventoryCard({ vehicle }: InventoryCardProps) {
             <p className="mt-1 text-sm text-[var(--color-primary)] opacity-80">
               {formatMileage(mileage)} • Bank Repossessed
             </p>
-            <div className="mt-2 rounded border border-[var(--color-border)] bg-white/60 px-3 py-2">
-              <p className="text-xs font-medium text-[var(--color-primary)] opacity-80">
-                Vehicle Inspection Reports
-              </p>
-              <p className="text-sm text-[var(--color-primary)]">
-                Available on request
-              </p>
-            </div>
+           
           </div>
 
           <div className="mt-4 flex flex-col items-start gap-3 lg:mt-0 lg:items-end">

@@ -87,14 +87,7 @@ export function VehicleCard({
             </p>
           )}
         </div>
-        <div className="mt-3 rounded border border-[var(--color-border)] bg-[var(--color-background)] px-3 py-2">
-          <p className="text-xs font-medium text-[var(--color-primary)] opacity-80">
-            Vehicle Inspection Reports
-          </p>
-          <p className="mt-0.5 text-sm text-[var(--color-primary)]">
-            Available on request
-          </p>
-        </div>
+       
         <div className="mt-4 flex flex-wrap gap-2">
           <Link
             href={getInterestContactUrl({ year, make, model, slug })}
