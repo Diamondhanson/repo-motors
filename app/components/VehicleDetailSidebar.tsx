@@ -60,12 +60,7 @@ export function VehicleDetailSidebar({ vehicle }: VehicleDetailSidebarProps) {
           I&apos;m Interested
         </Link>
 
-        <Link
-          href={inspectionUrl}
-          className="mt-3 flex w-full items-center justify-center rounded-[var(--radius-button)] border-2 border-[var(--color-primary)] px-4 py-3 text-base font-bold text-[var(--color-primary)] transition-opacity hover:opacity-90"
-        >
-          Book Physical Inspection
-        </Link>
+      
 
         <a
           href={whatsappUrl}

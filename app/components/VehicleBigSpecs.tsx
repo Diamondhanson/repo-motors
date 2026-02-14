@@ -1,6 +1,6 @@
 import type { InventoryVehicle } from "../data/inventory";
 
-const formatMileage = (km: number) => `${(km / 1000).toFixed(0)}k km`;
+const formatMileage = (km: number) => `${(km / 1000).toFixed(0)}k miles`;
 
 interface VehicleBigSpecsProps {
   vehicle: InventoryVehicle;
