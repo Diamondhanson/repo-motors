@@ -2,7 +2,7 @@ import { MetadataRoute } from "next";
 import { getVehicles } from "./data/inventory";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const baseUrl = "https://repomotors.com";
+  const baseUrl = "https://nationalrepomotors.com";
   const vehicles = await getVehicles();
 
   const staticPages = [
