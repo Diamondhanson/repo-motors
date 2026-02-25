@@ -11,7 +11,7 @@ export default function AdminLayout({
     <div className="flex min-h-screen flex-col bg-[var(--color-background)] lg:flex-row">
       <Toaster position="top-center" />
       <AdminNav />
-      <main className="flex-1 p-6 lg:pl-0">{children}</main>
+      <main className="flex-1 p-6 lg:pl-8">{children}</main>
     </div>
   );
 }
