@@ -11,6 +11,7 @@ export interface VehicleCardProps {
   year: number;
   price: number;
   downPayment?: number;
+  sold?: boolean;
   imageUrls: string[];
   slug: string;
 }
@@ -28,6 +29,7 @@ export function VehicleCard({
   year,
   price,
   downPayment,
+  sold,
   imageUrls,
   slug,
 }: VehicleCardProps) {
@@ -46,6 +48,14 @@ export function VehicleCard({
     >
       <Link href={`/inventory/${slug}`} className="block">
         <div className="relative aspect-[4/3] w-full overflow-hidden bg-[var(--color-border)]">
+          {sold && (
+            <span
+              className="absolute right-2 top-2 z-10 rounded bg-green-600 px-2 py-0.5 text-xs font-bold text-white"
+              aria-hidden
+            >
+              Sold
+            </span>
+          )}
           <Image
             src={primaryImage}
             alt={alt}

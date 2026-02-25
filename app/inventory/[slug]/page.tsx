@@ -90,7 +90,7 @@ export default async function VehicleDetailPage({
           {vehicle.year} {vehicle.make} {vehicle.model} - {vehicle.stockId}
         </h1>
 
-        <VehicleGallery imageUrls={vehicle.imageUrls} alt={alt} />
+        <VehicleGallery imageUrls={vehicle.imageUrls} alt={alt} sold={vehicle.sold} />
 
         <div className="mt-8 grid grid-cols-1 gap-8 lg:grid-cols-[1fr_350px]">
           <div className="order-2 flex flex-col gap-8 lg:order-1">

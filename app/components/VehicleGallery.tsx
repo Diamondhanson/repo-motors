@@ -6,6 +6,7 @@ import { useState, useCallback, useEffect } from "react";
 interface VehicleGalleryProps {
   imageUrls: string[];
   alt: string;
+  sold?: boolean;
 }
 
 function ExpandIcon() {
@@ -46,7 +47,7 @@ function CloseIcon() {
   );
 }
 
-export function VehicleGallery({ imageUrls, alt }: VehicleGalleryProps) {
+export function VehicleGallery({ imageUrls, alt, sold }: VehicleGalleryProps) {
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [fullscreenOpen, setFullscreenOpen] = useState(false);
 
@@ -81,7 +82,12 @@ export function VehicleGallery({ imageUrls, alt }: VehicleGalleryProps) {
             className="object-cover"
             sizes="(max-width: 768px) 100vw, 65vw"
           />
-          <span className="absolute right-3 top-3 rounded bg-[var(--color-accent)] px-3 py-1 text-xs font-bold text-white">
+          {sold && (
+            <span className="absolute left-3 top-3 z-10 rounded bg-green-600 px-3 py-1 text-xs font-bold text-white">
+              Sold
+            </span>
+          )}
+          <span className="absolute right-3 top-3 z-10 rounded bg-[var(--color-accent)] px-3 py-1 text-xs font-bold text-white">
             Bank Seized
           </span>
           <button

@@ -25,6 +25,8 @@ export interface FilterOptions {
 function dbToVehicle(dbRow: any): Vehicle {
   return {
     id: dbRow.id,
+    featured: dbRow.featured ?? false,
+    sold: dbRow.sold ?? false,
     make: dbRow.make,
     model: dbRow.model,
     year: dbRow.year,
@@ -74,6 +76,8 @@ function vehicleToDb(vehicle: Partial<Vehicle>): any {
   if (vehicle.inspectionReport !== undefined) dbData.inspection_report = vehicle.inspectionReport;
   if (vehicle.location !== undefined) dbData.location = vehicle.location;
   if (vehicle.features !== undefined) dbData.features = vehicle.features;
+  if (vehicle.featured !== undefined) dbData.featured = vehicle.featured;
+  if (vehicle.sold !== undefined) dbData.sold = vehicle.sold;
   
   return dbData;
 }
@@ -90,6 +94,42 @@ export async function getVehicles(): Promise<Vehicle[]> {
   }
 
   return data ? data.map(dbToVehicle) : [];
+}
+
+const FEATURED_MAX = 6;
+
+export async function getFeaturedCount(): Promise<number> {
+  const { count, error } = await supabaseServer
+    .from("vehicles")
+    .select("*", { count: "exact", head: true })
+    .eq("featured", true);
+
+  if (error) return 0;
+  return count ?? 0;
+}
+
+export async function getFeaturedVehiclesForHome(): Promise<Vehicle[]> {
+  const { data: featuredData } = await supabaseServer
+    .from("vehicles")
+    .select("*")
+    .eq("featured", true)
+    .order("updated_at", { ascending: false })
+    .limit(FEATURED_MAX);
+
+  const featured = featuredData ? featuredData.map(dbToVehicle) : [];
+  const remaining = FEATURED_MAX - featured.length;
+
+  if (remaining <= 0) return featured;
+
+  const { data: recentData } = await supabaseServer
+    .from("vehicles")
+    .select("*")
+    .eq("featured", false)
+    .order("created_at", { ascending: false })
+    .limit(remaining);
+
+  const recent = recentData ? recentData.map(dbToVehicle) : [];
+  return [...featured, ...recent];
 }
 
 export async function getVehicleBySlug(slug: string): Promise<Vehicle | undefined> {
@@ -114,6 +154,13 @@ export async function getVehicleBySlug(slug: string): Promise<Vehicle | undefine
 export async function createVehicle(
   data: Omit<Vehicle, "slug" | "id" | "createdAt" | "updatedAt"> & { slug?: string }
 ): Promise<Vehicle> {
+  if (data.featured) {
+    const count = await getFeaturedCount();
+    if (count >= FEATURED_MAX) {
+      throw new Error("Maximum 6 featured vehicles. Remove one to add another.");
+    }
+  }
+
   const slug =
     data.slug ||
     `${data.make}-${data.model}-${data.year}`.toLowerCase().replace(/\s+/g, "-");
@@ -146,6 +193,16 @@ export async function updateVehicle(
   slug: string,
   data: Partial<Vehicle>
 ): Promise<Vehicle | undefined> {
+  if (data.featured === true) {
+    const existing = await getVehicleBySlug(slug);
+    if (!existing?.featured) {
+      const count = await getFeaturedCount();
+      if (count >= FEATURED_MAX) {
+        throw new Error("Maximum 6 featured vehicles. Remove one to add another.");
+      }
+    }
+  }
+
   const vehicleData = vehicleToDb(data);
 
   const { data: updated, error } = await supabaseServer

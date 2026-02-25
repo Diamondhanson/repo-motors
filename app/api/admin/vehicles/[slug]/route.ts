@@ -53,9 +53,13 @@ export async function PUT(
     }
     return NextResponse.json(vehicle);
   } catch (err) {
+    const msg = err instanceof Error ? err.message : "Failed to update vehicle";
+    if (msg.includes("Maximum 6 featured")) {
+      return NextResponse.json({ error: msg }, { status: 400 });
+    }
     console.error(err);
     return NextResponse.json(
-      { error: "Failed to update vehicle" },
+      { error: msg },
       { status: 500 }
     );
   }

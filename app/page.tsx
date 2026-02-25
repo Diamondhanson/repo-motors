@@ -5,8 +5,9 @@ import { HeroSearchFilters } from "./components/HeroSearchFilters";
 import { HeroSlidingBackground } from "./components/HeroSlidingBackground";
 import { VehicleCard } from "./components/VehicleCard";
 import { RevealOnScroll } from "./components/RevealOnScroll";
-import { getVehicles } from "./data/inventory";
+import { getVehicles, getFeaturedVehiclesForHomePage } from "./data/inventory";
 import { getFilterOptions } from "./lib/services/vehicles";
+import { getReviewsForHome } from "./lib/services/reviews";
 
 export const revalidate = 600; // Revalidate every 10 minutes (ISR)
 
@@ -82,36 +83,56 @@ function CreditCardIcon() {
   );
 }
 
+const SAMPLE_REVIEWS = [
+  {
+    name: "John M.",
+    text: "Smooth process from start to finish. Got a great deal on a 2019 Camry. Title came in 4 days. Highly recommend.",
+  },
+  {
+    name: "Sarah K.",
+    text: "I was skeptical about buying a repo car, but the inspection report gave me confidence. The car runs perfectly.",
+  },
+  {
+    name: "Michael T.",
+    text: "No auctions, no pressure. Fixed price and transparent. Will buy from them again.",
+  },
+  {
+    name: "Jennifer L.",
+    text: "Reserved my vehicle with a deposit, inspected it, and drove it home. Exactly as described. Great experience.",
+  },
+];
+
 const howItWorksSteps = [
   {
     icon: SearchIcon,
-    title: "Browse",
+    title: "Browse Live Inventory",
     href: "/inventory",
     description:
-      "Search our inventory of bank repossessed and pre-owned vehicles. See the car, check specs, and review inspection reports.",
+      "Search our real-time database of bank-seized assets and certified repossessed vehicles. Every listing features a comprehensive inspection report, transparent liquidation pricing, and high-resolution galleries so you know exactly what you're buying.",
   },
   {
     icon: ClipboardIcon,
-    title: "Signal Interest",
-    href: "/how-to-buy",
+    title: "Secure Your Vehicle",
+    href: "/about",
     description:
-      "Like a vehicle? Send an email or WhatsApp to signal your interest. We’ll respond and guide you through the next steps.",
+      'Found the right deal? Contact us via WhatsApp or Email to place your Reservation Deposit. This essential step "locks" the vehicle, removes it from our public inventory, and triggers our legal team to begin your title and paperwork processing immediately. Note: This deposit is 100% applied toward your final purchase price.',
   },
   {
     icon: CreditCardIcon,
-    title: "Complete Purchase",
-    href: "/how-to-buy",
+    title: "Risk-Free Delivery & Inspection",
+    href: "/book-inspection",
     description:
-      "Optional physical inspection available. Fixed prices, no auctions. Title transfer guaranteed within 3–5 business days.",
+      "Sign your documents with confidence. Once your vehicle is delivered, your 2-day inspection period begins. Test drive it, take it to your mechanic, and ensure it's the perfect fit. Not satisfied? We'll arrange a pickup and provide a full refund of your deposit—no questions asked.",
   },
 ];
 
 export default async function Home() {
-  const [vehicles, filterOptions] = await Promise.all([
-    getVehicles(),
+  const [filterOptions, reviews, featuredVehicles] = await Promise.all([
     getFilterOptions(),
+    getReviewsForHome(4),
+    getFeaturedVehiclesForHomePage(),
   ]);
-  const featuredVehicles = vehicles.slice(0, 6);
+  const displayReviews = reviews.length >= 4 ? reviews.slice(0, 4) : SAMPLE_REVIEWS.slice(0, 4);
 
   return (
     <>
@@ -173,6 +194,8 @@ export default async function Home() {
           </div>
         </section>
 
+        
+
         <section
           className="border-t border-[var(--color-border)] bg-[#f5f2ed] px-4 py-12 md:px-6 md:py-[var(--section-padding)] lg:px-8"
           style={{ borderColor: "var(--color-border)" }}
@@ -194,6 +217,37 @@ export default async function Home() {
               {featuredVehicles.map((vehicle) => (
                 <RevealOnScroll key={vehicle.slug}>
                   <VehicleCard {...vehicle} />
+                </RevealOnScroll>
+              ))}
+            </div>
+          </div>
+        </section>
+        <section
+          className="border-t border-[var(--color-border)] px-4 py-12 md:px-6 md:py-[var(--section-padding)] lg:px-8"
+          style={{ borderColor: "var(--color-border)" }}
+          aria-label="Client reviews"
+        >
+          <div className="mx-auto max-w-7xl">
+            <RevealOnScroll className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+              <h2 className="text-2xl font-bold text-[var(--color-primary)] md:text-3xl">
+                Client Reviews
+              </h2>
+              <Link
+                href="/reviews"
+                className="rounded-[var(--radius-button)] border border-[var(--color-primary)] px-4 py-2 text-sm font-bold text-[var(--color-primary)] hover:opacity-90"
+              >
+                View more
+              </Link>
+            </RevealOnScroll>
+            <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+              {displayReviews.map((review, i) => (
+                <RevealOnScroll key={String(i)}>
+                  <div className="rounded-[var(--radius-card)] border border-[var(--color-border)] bg-white p-6 transition-shadow hover:shadow-[var(--shadow-card-hover)]">
+                    <p className="font-bold text-[var(--color-primary)]">{review.name}</p>
+                    <p className="mt-2 text-sm text-[var(--color-primary)] opacity-90">
+                      {review.text}
+                    </p>
+                  </div>
                 </RevealOnScroll>
               ))}
             </div>

@@ -41,6 +41,11 @@ export function VehicleDetailSidebar({ vehicle }: VehicleDetailSidebarProps) {
       aria-label="Vehicle purchase information"
     >
       <div className="rounded-[var(--radius-card)] border border-[var(--color-border)] bg-white p-6">
+        {vehicle.sold && (
+          <span className="mb-4 inline-block rounded bg-green-600 px-3 py-1 text-sm font-bold text-white">
+            Sold
+          </span>
+        )}
         <p className="text-3xl font-bold text-[var(--color-accent)]">
           {formatPrice(vehicle.price)}
         </p>

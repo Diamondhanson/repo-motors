@@ -65,8 +65,16 @@ export function InventoryCard({ vehicle }: InventoryCardProps) {
               }}
               loading="lazy"
             />
+            {vehicle.sold && (
+              <span
+                className="absolute left-2 top-2 z-10 rounded bg-green-600 px-2 py-0.5 text-xs font-bold text-white"
+                aria-hidden
+              >
+                Sold
+              </span>
+            )}
             <span
-              className="absolute right-2 top-2 rounded bg-[var(--color-accent)] px-2 py-0.5 text-xs font-bold text-white"
+              className="absolute right-2 top-2 z-10 rounded bg-[var(--color-accent)] px-2 py-0.5 text-xs font-bold text-white"
               aria-hidden
             >
               Bank Seized

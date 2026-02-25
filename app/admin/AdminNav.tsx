@@ -7,6 +7,7 @@ const navItems = [
   { href: "/admin", label: "Dashboard" },
   { href: "/admin/products", label: "Products" },
   { href: "/admin/contacts", label: "Contacts" },
+  { href: "/admin/reviews", label: "Reviews" },
 ];
 
 export function AdminNav() {

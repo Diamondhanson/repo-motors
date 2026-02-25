@@ -40,9 +40,13 @@ export async function POST(request: Request) {
     const vehicle = await createVehicle(body as Omit<Vehicle, "slug"> & { slug?: string });
     return NextResponse.json(vehicle);
   } catch (err) {
+    const msg = err instanceof Error ? err.message : "Failed to create vehicle";
+    if (msg.includes("Maximum 6 featured")) {
+      return NextResponse.json({ error: msg }, { status: 400 });
+    }
     console.error(err);
     return NextResponse.json(
-      { error: "Failed to create vehicle" },
+      { error: msg },
       { status: 500 }
     );
   }

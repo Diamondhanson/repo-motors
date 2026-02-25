@@ -1,6 +1,7 @@
 import {
   getVehicles as getVehiclesFromService,
   getVehicleBySlug as getVehicleBySlugFromService,
+  getFeaturedVehiclesForHome,
 } from "@/app/lib/services/vehicles";
 import type { Vehicle } from "@/app/lib/types";
 
@@ -15,4 +16,8 @@ export async function getVehicleBySlug(
   slug: string
 ): Promise<InventoryVehicle | undefined> {
   return getVehicleBySlugFromService(slug);
+}
+
+export async function getFeaturedVehiclesForHomePage(): Promise<InventoryVehicle[]> {
+  return getFeaturedVehiclesForHome();
 }

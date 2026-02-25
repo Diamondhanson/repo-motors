@@ -9,6 +9,8 @@ export interface InspectionReport {
 
 export interface Vehicle {
   id?: string;
+  featured?: boolean;
+  sold?: boolean;
   make: string;
   model: string;
   year: number;
@@ -39,5 +41,12 @@ export interface Contact {
   email: string;
   subject: string;
   message: string;
+  createdAt: string;
+}
+
+export interface Review {
+  id: string;
+  name: string;
+  text: string;
   createdAt: string;
 }

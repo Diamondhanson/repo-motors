@@ -2,7 +2,10 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
+import toast from "react-hot-toast";
 import type { Vehicle } from "@/app/lib/types";
+
+const FEATURED_MAX = 6;
 
 const formatPrice = (price: number) =>
   new Intl.NumberFormat("en-US", {
@@ -26,6 +29,75 @@ export default function AdminProductsPage() {
       .catch(() => setError("Failed to load vehicles"))
       .finally(() => setLoading(false));
   }, []);
+
+  const featuredCount = vehicles.filter((v) => v.featured).length;
+
+  const handleToggleFeatured = async (v: Vehicle) => {
+    if (v.featured) {
+      try {
+        const res = await fetch(`/api/admin/vehicles/${v.slug}`, {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          credentials: "include",
+          body: JSON.stringify({ featured: false }),
+        });
+        const data = await res.json().catch(() => ({}));
+        if (!res.ok) throw new Error(data.error || "Failed");
+        setVehicles((prev) =>
+          prev.map((item) =>
+            item.slug === v.slug ? { ...item, featured: false } : item
+          )
+        );
+        toast.success("Removed from featured");
+      } catch {
+        toast.error("Failed to remove from featured");
+      }
+      return;
+    }
+    if (featuredCount >= FEATURED_MAX) {
+      toast.error("Maximum 6 featured vehicles. Remove one to add another.");
+      return;
+    }
+    try {
+      const res = await fetch(`/api/admin/vehicles/${v.slug}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
+        body: JSON.stringify({ featured: true }),
+      });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) throw new Error(data.error || "Failed");
+      setVehicles((prev) =>
+        prev.map((item) =>
+          item.slug === v.slug ? { ...item, featured: true } : item
+        )
+      );
+      toast.success("Added to featured");
+    } catch (err) {
+      const msg = err instanceof Error ? err.message : "Failed";
+      toast.error(msg.includes("Maximum 6") ? msg : "Failed to add to featured");
+    }
+  };
+
+  const handleToggleSold = async (v: Vehicle) => {
+    try {
+      const res = await fetch(`/api/admin/vehicles/${v.slug}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
+        body: JSON.stringify({ sold: !v.sold }),
+      });
+      if (!res.ok) throw new Error("Failed");
+      setVehicles((prev) =>
+        prev.map((item) =>
+          item.slug === v.slug ? { ...item, sold: !item.sold } : item
+        )
+      );
+      toast.success(v.sold ? "Marked as unsold" : "Tagged as sold");
+    } catch {
+      toast.error("Failed to update sold status");
+    }
+  };
 
   const handleDelete = async (slug: string, name: string) => {
     if (!confirm(`Delete ${name}?`)) return;
@@ -114,7 +186,24 @@ export default function AdminProductsPage() {
                     {formatPrice(v.price)}
                   </td>
                   <td className="px-4 py-3">
-                    <div className="flex gap-2">
+                    <div className="flex flex-wrap items-center gap-2">
+                      <button
+                        type="button"
+                        onClick={() => handleToggleSold(v)}
+                        className="text-sm font-medium text-[var(--color-primary)] hover:underline"
+                      >
+                        {v.sold ? "Mark as unsold" : "Tag as sold"}
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => handleToggleFeatured(v)}
+                        disabled={
+                          !v.featured && featuredCount >= FEATURED_MAX
+                        }
+                        className="text-sm font-medium text-[var(--color-primary)] hover:underline disabled:opacity-50 disabled:cursor-not-allowed"
+                      >
+                        {v.featured ? "Remove from featured" : "Add to featured"}
+                      </button>
                       <Link
                         href={`/admin/products/${v.slug}/edit`}
                         className="text-sm font-medium text-[var(--color-primary)] hover:underline"

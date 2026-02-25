@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import toast from "react-hot-toast";
 import type { Vehicle, InspectionReport } from "@/app/lib/types";
 
 const INSPECTION_FIELDS: (keyof InspectionReport)[] = [
@@ -24,12 +25,12 @@ const INSPECTION_OPTIONS = [
 ];
 
 const defaultInspection: InspectionReport = {
-  engine: "",
-  suspension: "",
-  brakes: "",
-  transmission: "",
-  electrical: "",
-  bodywork: "",
+  engine: "Excellent",
+  suspension: "Excellent",
+  brakes: "Excellent",
+  transmission: "Excellent",
+  electrical: "Excellent",
+  bodywork: "Excellent",
 };
 
 interface ProductFormProps {
@@ -64,6 +65,7 @@ export function ProductForm({
     imageUrls: initial?.imageUrls ?? [""],
     features: initial?.features ?? [],
     inspectionReport: { ...defaultInspection, ...initial?.inspectionReport },
+    featured: initial?.featured ?? false,
   });
   const [featuresText, setFeaturesText] = useState(
     initial?.features?.join(", ") ?? ""
@@ -202,8 +204,12 @@ export function ProductForm({
         window.location.href = "/admin/products";
       }
     } catch (err) {
+      const msg = err instanceof Error ? err.message : "Failed to save";
       setStatus("error");
-      setErrorMsg(err instanceof Error ? err.message : "Failed to save");
+      setErrorMsg(msg);
+      if (msg.includes("Maximum 6 featured")) {
+        toast.error(msg);
+      }
     }
   };
 
@@ -616,6 +622,22 @@ export function ProductForm({
             </div>
           ))}
         </div>
+      </div>
+
+      <div>
+        <label className="flex cursor-pointer items-center gap-3">
+          <input
+            type="checkbox"
+            checked={form.featured}
+            onChange={(e) =>
+              setForm((p) => ({ ...p, featured: e.target.checked }))
+            }
+            className="size-4 rounded border-[var(--color-border)] text-[var(--color-primary)] focus:ring-[var(--color-primary)]"
+          />
+          <span className="text-sm font-medium text-[var(--color-primary)]">
+            Feature on home page
+          </span>
+        </label>
       </div>
 
       <div className="flex gap-4">

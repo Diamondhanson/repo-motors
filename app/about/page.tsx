@@ -2,37 +2,83 @@ import type { Metadata } from "next";
 import Link from "next/link";
 
 export const metadata: Metadata = {
-  title: "How to Buy | Repo Motors",
+  title: "About | Repo Motors",
   description:
-    "Learn how to purchase bank repossessed and pre-owned vehicles. Browse, signal interest, optional inspection, and complete your purchase.",
+    "Learn how Bank Seized Cars sources vehicles and how to purchase bank repossessed and pre-owned cars. Transparent process, fixed pricing, risk-free inspection.",
 };
 
-export default function HowToBuyPage() {
+export default function AboutPage() {
   return (
     <main className="min-h-screen bg-[var(--color-background)]">
       <div className="mx-auto max-w-3xl px-4 py-12 md:px-6 lg:px-8">
         <h1 className="text-3xl font-bold text-[var(--color-primary)] md:text-4xl">
-          How to Buy
+          About Us
         </h1>
         <p className="mt-4 text-lg text-[var(--color-primary)] opacity-90">
-          Straightforward process to purchase bank repossessed and pre-owned
-          vehicles. No auctions—just fixed prices and clear steps.
+          Bank Seized Cars connects buyers with quality bank repossessed and
+          certified pre-owned vehicles. We offer transparent pricing, fixed
+          rates, and a straightforward purchase process—no auctions.
         </p>
 
         <section className="mt-12">
           <h2 className="text-xl font-bold text-[var(--color-primary)]">
-            The Process
+            How We Source Our Vehicles
+          </h2>
+          <p className="mt-4 text-[var(--color-primary)] opacity-90">
+            Our inventory comes directly from financial institutions and
+            liquidation partners. When borrowers default on auto loans, banks
+            repossess these vehicles and release them for resale. We work with
+            trusted partners to acquire these units, inspect them thoroughly,
+            and list them at fair liquidation prices.
+          </p>
+          <ul className="mt-6 space-y-4">
+            <li className="rounded-[var(--radius-card)] border border-[var(--color-border)] bg-white p-4">
+              <h4 className="font-bold text-[var(--color-primary)]">
+                Bank Repossessions
+              </h4>
+              <p className="mt-1 text-sm text-[var(--color-primary)] opacity-90">
+                Vehicles repossessed by banks and credit unions after loan
+                default. Clean titles and full documentation provided.
+              </p>
+            </li>
+            <li className="rounded-[var(--radius-card)] border border-[var(--color-border)] bg-white p-4">
+              <h4 className="font-bold text-[var(--color-primary)]">
+                Liquidations & Partnerships
+              </h4>
+              <p className="mt-1 text-sm text-[var(--color-primary)] opacity-90">
+                We partner with financial institutions and asset managers to
+                acquire batches of repossessed vehicles at competitive
+                liquidation rates.
+              </p>
+            </li>
+            <li className="rounded-[var(--radius-card)] border border-[var(--color-border)] bg-white p-4">
+              <h4 className="font-bold text-[var(--color-primary)]">
+                Quality & Transparency
+              </h4>
+              <p className="mt-1 text-sm text-[var(--color-primary)] opacity-90">
+                Every vehicle undergoes inspection. We document condition,
+                mileage, and specs so you know exactly what you&apos;re buying before
+                you commit.
+              </p>
+            </li>
+          </ul>
+        </section>
+
+        <section className="mt-12">
+          <h2 className="text-xl font-bold text-[var(--color-primary)]">
+            How to Buy
           </h2>
           <ol className="mt-6 space-y-8">
             <li>
               <h3 className="font-bold text-[var(--color-primary)]">
-                1. Browse Our Inventory
+                1. Browse Live Inventory
               </h3>
               <p className="mt-2 text-[var(--color-primary)] opacity-90">
-                Explore our listings of bank repossessed and pre-owned vehicles.
-                Each listing shows photos, specs, price, mileage, and vehicle
-                inspection report summaries. Use filters to narrow by make,
-                model, year, price, and mileage.
+                Search our real-time database of bank-seized assets and
+                certified repossessed vehicles. Every listing features a
+                comprehensive inspection report, transparent liquidation
+                pricing, and high-resolution galleries so you know exactly what
+                you&apos;re buying.
               </p>
               <Link
                 href="/inventory"
@@ -44,13 +90,15 @@ export default function HowToBuyPage() {
 
             <li>
               <h3 className="font-bold text-[var(--color-primary)]">
-                2. See the Car & Signal Your Interest
+                2. Secure Your Vehicle
               </h3>
               <p className="mt-2 text-[var(--color-primary)] opacity-90">
-                When you find a vehicle you like, signal your interest by
-                sending us an email or message via WhatsApp. Include the
-                vehicle’s Stock ID (e.g. RM-2019-001) and we’ll respond promptly
-                to discuss next steps.
+                Found the right deal? Contact us via WhatsApp or Email to place
+                your Reservation Deposit. This essential step &quot;locks&quot; the
+                vehicle, removes it from our public inventory, and triggers our
+                legal team to begin your title and paperwork processing
+                immediately. Note: This deposit is 100% applied toward your
+                final purchase price.
               </p>
               <Link
                 href="/contact"
@@ -62,30 +110,21 @@ export default function HowToBuyPage() {
 
             <li>
               <h3 className="font-bold text-[var(--color-primary)]">
-                3. Book a Physical Inspection (Optional)
+                3. Risk-Free Delivery &amp; Inspection
               </h3>
               <p className="mt-2 text-[var(--color-primary)] opacity-90">
-                Want to see and test-drive the vehicle before deciding? You can
-                book a physical inspection. We’ll arrange a time and location for
-                you to view the car in person.
+                Sign your documents with confidence. Once your vehicle is
+                delivered, your 2-day inspection period begins. Test drive it,
+                take it to your mechanic, and ensure it&apos;s the perfect fit. Not
+                satisfied? We&apos;ll arrange a pickup and provide a full refund of
+                your deposit—no questions asked.
               </p>
               <Link
-                href="/contact?type=inspection"
+                href="/book-inspection"
                 className="mt-3 inline-block rounded-[var(--radius-button)] border border-[var(--color-primary)] px-4 py-2 text-sm font-bold text-[var(--color-primary)] hover:opacity-90"
               >
                 Book Inspection
               </Link>
-            </li>
-
-            <li>
-              <h3 className="font-bold text-[var(--color-primary)]">
-                4. Complete the Purchase
-              </h3>
-              <p className="mt-2 text-[var(--color-primary)] opacity-90">
-                Once you’re ready, we’ll guide you through paperwork and payment.
-                All our vehicles are bank repossessed; title transfer is
-                guaranteed within 3–5 business days after completion.
-              </p>
             </li>
           </ol>
         </section>
@@ -100,8 +139,8 @@ export default function HowToBuyPage() {
                 Fixed Pricing
               </h4>
               <p className="mt-1 text-sm text-[var(--color-primary)] opacity-90">
-                All listed prices are fixed. No bidding or auctions. What you see
-                is what you pay.
+                All listed prices are fixed. No bidding or auctions. What you
+                see is what you pay.
               </p>
             </li>
             <li className="rounded-[var(--radius-card)] border border-[var(--color-border)] bg-white p-4">
