@@ -1,7 +1,8 @@
 "use client";
 
 import Image from "next/image";
-import { useState, useCallback, useEffect } from "react";
+import { useState, useCallback, useEffect, useMemo } from "react";
+import { galleryImageUrls } from "../lib/cardImages";
 
 interface VehicleGalleryProps {
   imageUrls: string[];
@@ -48,19 +49,26 @@ function CloseIcon() {
 }
 
 export function VehicleGallery({ imageUrls, alt, sold }: VehicleGalleryProps) {
+  const urls = useMemo(() => galleryImageUrls(imageUrls), [imageUrls]);
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [fullscreenOpen, setFullscreenOpen] = useState(false);
+
+  const activeIndex = Math.min(
+    selectedIndex,
+    Math.max(0, urls.length - 1)
+  );
+  const currentImage = urls[activeIndex];
 
   const handleKeyDown = useCallback(
     (e: KeyboardEvent) => {
       if (!fullscreenOpen) return;
       if (e.key === "Escape") setFullscreenOpen(false);
       if (e.key === "ArrowLeft")
-        setSelectedIndex((i) => (i === 0 ? imageUrls.length - 1 : i - 1));
+        setSelectedIndex((i) => (i === 0 ? urls.length - 1 : i - 1));
       if (e.key === "ArrowRight")
-        setSelectedIndex((i) => (i === imageUrls.length - 1 ? 0 : i + 1));
+        setSelectedIndex((i) => (i === urls.length - 1 ? 0 : i + 1));
     },
-    [fullscreenOpen, imageUrls.length]
+    [fullscreenOpen, urls.length]
   );
 
   useEffect(() => {
@@ -68,7 +76,9 @@ export function VehicleGallery({ imageUrls, alt, sold }: VehicleGalleryProps) {
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, [handleKeyDown]);
 
-  const currentImage = imageUrls[selectedIndex] ?? imageUrls[0];
+  useEffect(() => {
+    setSelectedIndex((i) => Math.min(i, Math.max(0, urls.length - 1)));
+  }, [urls.length]);
 
   return (
     <>
@@ -76,7 +86,7 @@ export function VehicleGallery({ imageUrls, alt, sold }: VehicleGalleryProps) {
         <div className="relative aspect-[16/10] w-full overflow-hidden rounded-[var(--radius-card)] border border-[var(--color-border)] bg-[var(--color-border)]">
           <Image
             src={currentImage}
-            alt={`${alt} - image ${selectedIndex + 1}`}
+            alt={`${alt} - image ${activeIndex + 1}`}
             fill
             priority
             className="object-cover"
@@ -101,21 +111,21 @@ export function VehicleGallery({ imageUrls, alt, sold }: VehicleGalleryProps) {
           </button>
         </div>
 
-        {imageUrls.length > 1 && (
+        {urls.length > 1 && (
           <div className="mt-3 flex gap-2 overflow-x-auto pb-2">
-            {imageUrls.map((url, i) => (
+            {urls.map((url, i) => (
               <button
-                key={url}
+                key={`${i}-${url}`}
                 type="button"
                 onClick={() => setSelectedIndex(i)}
                 className={`relative h-16 w-24 flex-shrink-0 overflow-hidden rounded border-2 transition-colors ${
-                  i === selectedIndex
+                  i === activeIndex
                     ? "border-[var(--color-primary)]"
                     : "border-transparent opacity-70 hover:opacity-100"
                 }`}
                 style={{
                   borderColor:
-                    i === selectedIndex ? "var(--color-primary)" : undefined,
+                    i === activeIndex ? "var(--color-primary)" : undefined,
                 }}
                 aria-label={`View image ${i + 1}`}
               >
@@ -156,13 +166,13 @@ export function VehicleGallery({ imageUrls, alt, sold }: VehicleGalleryProps) {
               sizes="100vw"
             />
           </div>
-          {imageUrls.length > 1 && (
+          {urls.length > 1 && (
             <>
               <button
                 type="button"
                 onClick={() =>
                   setSelectedIndex((i) =>
-                    i === 0 ? imageUrls.length - 1 : i - 1
+                    i === 0 ? urls.length - 1 : i - 1
                   )
                 }
                 className="absolute left-4 top-1/2 -translate-y-1/2 rounded-[var(--radius-button)] bg-white/20 p-2 text-white hover:bg-white/40"
@@ -186,7 +196,7 @@ export function VehicleGallery({ imageUrls, alt, sold }: VehicleGalleryProps) {
                 type="button"
                 onClick={() =>
                   setSelectedIndex((i) =>
-                    i === imageUrls.length - 1 ? 0 : i + 1
+                    i === urls.length - 1 ? 0 : i + 1
                   )
                 }
                 className="absolute right-4 top-1/2 -translate-y-1/2 rounded-[var(--radius-button)] bg-white/20 p-2 text-white hover:bg-white/40"

@@ -4,6 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
 import { getInterestContactUrl } from "../lib/contact";
+import { resolveCardHoverImages } from "../lib/cardImages";
 
 export interface VehicleCardProps {
   make: string;
@@ -36,8 +37,8 @@ export function VehicleCard({
   const [hoveredIndex, setHoveredIndex] = useState(0);
   const alt = `${year} ${make} ${model}`;
 
-  const primaryImage = imageUrls[0] ?? "";
-  const secondaryImage = imageUrls[1] ?? imageUrls[0];
+  const { primary: primaryImage, secondary: secondaryImage, hasSecond } =
+    resolveCardHoverImages(imageUrls);
 
   return (
     <article
@@ -63,21 +64,27 @@ export function VehicleCard({
             sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
             className="object-cover transition-transform duration-500 ease-out"
             style={{
-              transform: hoveredIndex === 1 ? "translateX(-100%)" : "translateX(0)",
+              transform:
+                hasSecond && hoveredIndex === 1
+                  ? "translateX(-100%)"
+                  : "translateX(0)",
             }}
             loading="lazy"
           />
-          <Image
-            src={secondaryImage}
-            alt={`${alt} - alternate view`}
-            fill
-            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-            className="absolute inset-0 object-cover transition-transform duration-500 ease-out"
-            style={{
-              transform: hoveredIndex === 1 ? "translateX(0)" : "translateX(100%)",
-            }}
-            loading="lazy"
-          />
+          {hasSecond && (
+            <Image
+              src={secondaryImage}
+              alt={`${alt} - alternate view`}
+              fill
+              sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+              className="absolute inset-0 object-cover transition-transform duration-500 ease-out"
+              style={{
+                transform:
+                  hoveredIndex === 1 ? "translateX(0)" : "translateX(100%)",
+              }}
+              loading="lazy"
+            />
+          )}
         </div>
       </Link>
       <div className="p-4">

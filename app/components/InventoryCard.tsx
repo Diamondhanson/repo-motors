@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useState } from "react";
 import { RevealOnScroll } from "./RevealOnScroll";
 import { getInterestContactUrl } from "../lib/contact";
+import { resolveCardHoverImages } from "../lib/cardImages";
 import type { InventoryVehicle } from "../data/inventory";
 
 const formatPrice = (price: number) =>
@@ -25,8 +26,8 @@ export function InventoryCard({ vehicle }: InventoryCardProps) {
   const [hoveredIndex, setHoveredIndex] = useState(0);
   const { make, model, year, price, mileage, imageUrls, slug } = vehicle;
   const alt = `${year} ${make} ${model} - Bank Repossessed Vehicle`;
-  const primaryImage = imageUrls[0] ?? "";
-  const secondaryImage = imageUrls[1] ?? imageUrls[0];
+  const { primary: primaryImage, secondary: secondaryImage, hasSecond } =
+    resolveCardHoverImages(imageUrls);
 
   return (
     <RevealOnScroll>
@@ -49,22 +50,26 @@ export function InventoryCard({ vehicle }: InventoryCardProps) {
               className="object-cover transition-transform duration-500 ease-out"
               style={{
                 transform:
-                  hoveredIndex === 1 ? "translateX(-100%)" : "translateX(0)",
+                  hasSecond && hoveredIndex === 1
+                    ? "translateX(-100%)"
+                    : "translateX(0)",
               }}
               loading="lazy"
             />
-            <Image
-              src={secondaryImage}
-              alt={`${alt} - alternate view`}
-              fill
-              sizes="(max-width: 1024px) 100vw, 288px"
-              className="absolute inset-0 object-cover transition-transform duration-500 ease-out"
-              style={{
-                transform:
-                  hoveredIndex === 1 ? "translateX(0)" : "translateX(100%)",
-              }}
-              loading="lazy"
-            />
+            {hasSecond && (
+              <Image
+                src={secondaryImage}
+                alt={`${alt} - alternate view`}
+                fill
+                sizes="(max-width: 1024px) 100vw, 288px"
+                className="absolute inset-0 object-cover transition-transform duration-500 ease-out"
+                style={{
+                  transform:
+                    hoveredIndex === 1 ? "translateX(0)" : "translateX(100%)",
+                }}
+                loading="lazy"
+              />
+            )}
             {vehicle.sold && (
               <span
                 className="absolute left-2 top-2 z-10 rounded bg-green-600 px-2 py-0.5 text-xs font-bold text-white"

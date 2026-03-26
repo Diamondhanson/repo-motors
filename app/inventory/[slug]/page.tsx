@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getVehicleBySlug } from "@/app/data/inventory";
+import { galleryImageUrls } from "@/app/lib/cardImages";
 import { JsonLd } from "../../components/JsonLd";
 import { VehicleGallery } from "../../components/VehicleGallery";
 import { VehicleDetailSidebar } from "../../components/VehicleDetailSidebar";
@@ -45,7 +46,7 @@ export default async function VehicleDetailPage({
     "@type": "Product",
     name: `${vehicle.year} ${vehicle.make} ${vehicle.model}`,
     description: vehicle.description || `${vehicle.year} ${vehicle.make} ${vehicle.model} - Bank Repossessed Vehicle`,
-    image: vehicle.imageUrls[0],
+    image: galleryImageUrls(vehicle.imageUrls)[0],
     sku: vehicle.stockId,
     offers: {
       "@type": "Offer",
