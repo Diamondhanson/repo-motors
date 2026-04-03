@@ -75,6 +75,14 @@ export default function AdminContactsPage() {
                     >
                       {c.email}
                     </a>
+                    {c.phone ? (
+                      <a
+                        href={`tel:${c.phone.replace(/\s/g, "")}`}
+                        className="mt-1 block text-sm text-[var(--color-primary)] opacity-80 hover:underline"
+                      >
+                        {c.phone}
+                      </a>
+                    ) : null}
                     <p className="mt-1 text-sm font-medium text-[var(--color-primary)]">
                       {c.subject}
                     </p>

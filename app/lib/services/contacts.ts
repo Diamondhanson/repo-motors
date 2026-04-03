@@ -9,6 +9,7 @@ function dbToContact(dbRow: any): Contact {
     email: dbRow.email,
     subject: dbRow.subject,
     message: dbRow.message,
+    phone: dbRow.phone ?? null,
     createdAt: dbRow.created_at,
   };
 }
@@ -32,6 +33,7 @@ export async function createContact(data: {
   email: string;
   subject: string;
   message: string;
+  phone?: string | null;
 }): Promise<Contact> {
   const { data: inserted, error } = await supabaseServer
     .from("contacts")
@@ -40,6 +42,7 @@ export async function createContact(data: {
       email: data.email,
       subject: data.subject,
       message: data.message,
+      phone: data.phone ?? null,
     })
     .select()
     .single();

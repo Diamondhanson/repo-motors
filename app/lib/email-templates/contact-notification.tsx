@@ -1,8 +1,15 @@
+import parsePhoneNumberFromString from "libphonenumber-js/min";
+
+function phoneDisplayLabel(e164: string) {
+  return parsePhoneNumberFromString(e164)?.formatInternational() ?? e164;
+}
+
 interface ContactEmailProps {
   name: string;
   email: string;
   subject: string;
   message: string;
+  phone?: string | null;
   vehicle?: string;
   stockId?: string;
 }
@@ -12,6 +19,7 @@ export function ContactNotificationEmail({
   email,
   subject,
   message,
+  phone,
   vehicle,
   stockId,
 }: ContactEmailProps) {
@@ -150,6 +158,29 @@ export function ContactNotificationEmail({
                 </a>
               </p>
             </div>
+
+            {phone ? (
+              <div style={{ marginBottom: "15px" }}>
+                <p
+                  style={{
+                    margin: 0,
+                    fontSize: "12px",
+                    color: "#6b7280",
+                    textTransform: "uppercase",
+                  }}
+                >
+                  Phone
+                </p>
+                <p style={{ margin: "5px 0 0", fontSize: "16px" }}>
+                  <a
+                    href={`tel:${phone.replace(/\s/g, "")}`}
+                    style={{ color: "#e63946", textDecoration: "none" }}
+                  >
+                    {phoneDisplayLabel(phone)}
+                  </a>
+                </p>
+              </div>
+            ) : null}
 
             <div style={{ marginBottom: "15px" }}>
               <p

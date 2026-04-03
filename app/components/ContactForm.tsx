@@ -1,6 +1,8 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import PhoneInput from "react-phone-number-input";
+import "react-phone-number-input/style.css";
 
 interface ContactFormProps {
   searchParams: Promise<{ type?: string; stockId?: string; vehicle?: string }>;
@@ -18,7 +20,9 @@ export function ContactForm({ searchParams }: ContactFormProps) {
     subject: "",
     message: "",
   });
+  const [phone, setPhone] = useState<string | undefined>(undefined);
   const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
+  const [errorMessage, setErrorMessage] = useState<string>("");
 
   useEffect(() => {
     searchParams.then(setParams);
@@ -53,6 +57,7 @@ export function ContactForm({ searchParams }: ContactFormProps) {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setStatus("loading");
+    setErrorMessage("");
     try {
       const res = await fetch("/api/contact", {
         method: "POST",
@@ -62,16 +67,20 @@ export function ContactForm({ searchParams }: ContactFormProps) {
           email: formData.email,
           subject: formData.subject || "Contact from Repo Motors",
           message: formData.message,
+          phone: phone || undefined,
           vehicle: params.vehicle,
           stockId: params.stockId,
         }),
       });
       if (!res.ok) {
-        const data = await res.json().catch(() => ({}));
-        throw new Error(data.error || "Failed to send message");
+        const data = (await res.json().catch(() => ({}))) as { error?: string };
+        const msg = data.error || "Failed to send message";
+        setErrorMessage(msg);
+        throw new Error(msg);
       }
       setStatus("success");
       setFormData({ name: "", email: "", subject: "", message: "" });
+      setPhone(undefined);
     } catch (err) {
       setStatus("error");
       console.error(err);
@@ -124,6 +133,26 @@ export function ContactForm({ searchParams }: ContactFormProps) {
         </div>
         <div>
           <label
+            htmlFor="contact-phone"
+            className="mb-1 block text-sm font-medium text-[var(--color-primary)]"
+          >
+            Phone <span className="font-normal opacity-70">(optional)</span>
+          </label>
+          <PhoneInput
+            international
+            defaultCountry="US"
+            limitMaxLength
+            value={phone}
+            onChange={(value) => setPhone(value)}
+            numberInputProps={{
+              id: "contact-phone",
+              autoComplete: "tel",
+              placeholder: "Phone number",
+            }}
+          />
+        </div>
+        <div>
+          <label
             htmlFor="contact-subject"
             className="mb-1 block text-sm font-medium text-[var(--color-primary)]"
           >
@@ -166,7 +195,8 @@ export function ContactForm({ searchParams }: ContactFormProps) {
         )}
         {status === "error" && (
           <p className="rounded-[var(--radius-button)] bg-red-100 p-3 text-sm text-red-800">
-            Failed to send message. Please try again or email us directly.
+            {errorMessage ||
+              "Failed to send message. Please try again or email us directly."}
           </p>
         )}
         <button

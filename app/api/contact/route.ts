@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { isValidPhoneNumber } from "libphonenumber-js/min";
 import { createContact } from "@/app/lib/services/contacts";
 import { Resend } from "resend";
 import { ContactNotificationEmail } from "@/app/lib/email-templates/contact-notification";
@@ -8,7 +9,8 @@ const resend = new Resend(process.env.RESEND_API_KEY);
 export async function POST(request: Request) {
   try {
     const body = await request.json();
-    const { name, email, subject, message, vehicle, stockId } = body;
+    const { name, email, subject, message, vehicle, stockId, phone: phoneRaw } =
+      body;
 
     if (!name || !email || !message) {
       return NextResponse.json(
@@ -17,12 +19,25 @@ export async function POST(request: Request) {
       );
     }
 
+    let phone: string | null = null;
+    if (phoneRaw != null && String(phoneRaw).trim() !== "") {
+      const trimmed = String(phoneRaw).trim();
+      if (!isValidPhoneNumber(trimmed)) {
+        return NextResponse.json(
+          { error: "Invalid phone number" },
+          { status: 400 }
+        );
+      }
+      phone = trimmed;
+    }
+
     // Save to database
     const contact = await createContact({
       name: String(name).trim(),
       email: String(email).trim(),
       subject: String(subject || "Contact from Repo Motors").trim(),
       message: String(message).trim(),
+      phone,
     });
 
     // Send email notification via Resend (SDK returns { data, error }; it does not throw on API errors)
@@ -36,6 +51,7 @@ export async function POST(request: Request) {
           email: String(email).trim(),
           subject: String(subject || "Contact from Repo Motors").trim(),
           message: String(message).trim(),
+          phone,
           vehicle,
           stockId,
         }),
