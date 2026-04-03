@@ -25,9 +25,9 @@ export async function POST(request: Request) {
       message: String(message).trim(),
     });
 
-    // Send email notification via Resend
+    // Send email notification via Resend (SDK returns { data, error }; it does not throw on API errors)
     try {
-      await resend.emails.send({
+      const { data: emailData, error: emailError } = await resend.emails.send({
         from: process.env.RESEND_FROM_EMAIL || "Repo Motors <onboarding@resend.dev>",
         to: process.env.RESEND_TO_EMAIL || "barnessvene@gmail.com",
         subject: `New Contact: ${subject || "General Inquiry"}`,
@@ -40,10 +40,14 @@ export async function POST(request: Request) {
           stockId,
         }),
       });
+      if (emailError) {
+        console.error("[Resend] Failed to send contact email:", emailError);
+      } else {
+        console.info("[Resend] Contact notification sent:", emailData?.id);
+      }
     } catch (emailError: unknown) {
-      // Log error but don't fail the request - contact is still saved to database
       const err = emailError as { message?: string; statusCode?: number };
-      console.error("[Resend] Failed to send contact email:", {
+      console.error("[Resend] Exception while sending contact email:", {
         message: err?.message,
         statusCode: err?.statusCode,
         error: emailError,
