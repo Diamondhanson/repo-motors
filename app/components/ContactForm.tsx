@@ -176,6 +176,8 @@ export function ContactForm({ searchParams }: ContactFormProps) {
           >
             Message
           </label>
+
+
           <textarea
             id="contact-message"
             rows={5}
@@ -199,6 +201,8 @@ export function ContactForm({ searchParams }: ContactFormProps) {
               "Failed to send message. Please try again or email us directly."}
           </p>
         )}
+
+  
         <button
           type="submit"
           disabled={status === "loading"}
