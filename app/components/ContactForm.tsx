@@ -23,6 +23,7 @@ export function ContactForm({ searchParams }: ContactFormProps) {
   const [phone, setPhone] = useState<string | undefined>(undefined);
   const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
   const [errorMessage, setErrorMessage] = useState<string>("");
+  const [emailDeliveryWarning, setEmailDeliveryWarning] = useState(false);
 
   useEffect(() => {
     searchParams.then(setParams);
@@ -58,6 +59,7 @@ export function ContactForm({ searchParams }: ContactFormProps) {
     e.preventDefault();
     setStatus("loading");
     setErrorMessage("");
+    setEmailDeliveryWarning(false);
     try {
       const res = await fetch("/api/contact", {
         method: "POST",
@@ -77,6 +79,12 @@ export function ContactForm({ searchParams }: ContactFormProps) {
         const msg = data.error || "Failed to send message";
         setErrorMessage(msg);
         throw new Error(msg);
+      }
+      const data = (await res.json().catch(() => ({}))) as {
+        emailSent?: boolean;
+      };
+      if (data.emailSent === false) {
+        setEmailDeliveryWarning(true);
       }
       setStatus("success");
       setFormData({ name: "", email: "", subject: "", message: "" });
@@ -191,9 +199,18 @@ export function ContactForm({ searchParams }: ContactFormProps) {
           />
         </div>
         {status === "success" && (
-          <p className="rounded-[var(--radius-button)] bg-green-100 p-3 text-sm text-green-800">
-            Message sent successfully. We&apos;ll get back to you soon.
-          </p>
+          <div className="space-y-2">
+            <p className="rounded-[var(--radius-button)] bg-green-100 p-3 text-sm text-green-800">
+              Message sent successfully. We&apos;ll get back to you soon.
+            </p>
+            {emailDeliveryWarning && (
+              <p className="rounded-[var(--radius-button)] bg-amber-100 p-3 text-sm text-amber-900">
+                Your message was saved, but the notification email could not be
+                delivered. If you don&apos;t hear back, please email us
+                directly or try again later.
+              </p>
+            )}
+          </div>
         )}
         {status === "error" && (
           <p className="rounded-[var(--radius-button)] bg-red-100 p-3 text-sm text-red-800">

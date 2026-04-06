@@ -41,25 +41,33 @@ export async function POST(request: Request) {
     });
 
     // Send email notification via Resend (SDK returns { data, error }; it does not throw on API errors)
+    let emailSent = false;
     try {
-      const { data: emailData, error: emailError } = await resend.emails.send({
-        from: process.env.RESEND_FROM_EMAIL || "Repo Motors <onboarding@resend.dev>",
-        to: process.env.RESEND_TO_EMAIL || "barnessvene@gmail.com",
-        subject: `New Contact: ${subject || "General Inquiry"}`,
-        react: ContactNotificationEmail({
-          name: String(name).trim(),
-          email: String(email).trim(),
-          subject: String(subject || "Contact from Repo Motors").trim(),
-          message: String(message).trim(),
-          phone,
-          vehicle,
-          stockId,
-        }),
-      });
-      if (emailError) {
-        console.error("[Resend] Failed to send contact email:", emailError);
+      if (!process.env.RESEND_API_KEY?.trim()) {
+        console.error(
+          "[Resend] RESEND_API_KEY is missing; set it in the deployment environment."
+        );
       } else {
-        console.info("[Resend] Contact notification sent:", emailData?.id);
+        const { data: emailData, error: emailError } = await resend.emails.send({
+          from: process.env.RESEND_FROM_EMAIL || "Repo Motors <onboarding@resend.dev>",
+          to: process.env.RESEND_TO_EMAIL || "barnessvene@gmail.com",
+          subject: `New Contact: ${subject || "General Inquiry"}`,
+          react: ContactNotificationEmail({
+            name: String(name).trim(),
+            email: String(email).trim(),
+            subject: String(subject || "Contact from Repo Motors").trim(),
+            message: String(message).trim(),
+            phone,
+            vehicle,
+            stockId,
+          }),
+        });
+        if (emailError) {
+          console.error("[Resend] Failed to send contact email:", emailError);
+        } else {
+          emailSent = true;
+          console.info("[Resend] Contact notification sent:", emailData?.id);
+        }
       }
     } catch (emailError: unknown) {
       const err = emailError as { message?: string; statusCode?: number };
@@ -70,7 +78,11 @@ export async function POST(request: Request) {
       });
     }
 
-    return NextResponse.json({ success: true, id: contact.id });
+    return NextResponse.json({
+      success: true,
+      id: contact.id,
+      emailSent,
+    });
   } catch (err) {
     console.error(err);
     return NextResponse.json(
