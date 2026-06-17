@@ -50,7 +50,7 @@ export async function POST(request: Request) {
       } else {
         const { data: emailData, error: emailError } = await resend.emails.send({
           from: process.env.RESEND_FROM_EMAIL || "Repo Motors <onboarding@resend.dev>",
-          to: process.env.RESEND_TO_EMAIL || "barnessvene@gmail.com",
+          to: process.env.RESEND_TO_EMAIL || "nationalrepomotors@gmail.com",
           subject: `New Contact: ${subject || "General Inquiry"}`,
           react: ContactNotificationEmail({
             name: String(name).trim(),

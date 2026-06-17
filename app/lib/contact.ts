@@ -1,4 +1,4 @@
-export const CONTACT_EMAIL = "info@repomotors.com";
+export const CONTACT_EMAIL = "nationalrepomotors@gmail.com";
 export const WHATSAPP_NUMBER = "17162953868";
 /** E.164 for sms:/tel: links (same number as SMS_TEXT_NUMBER_DISPLAY) */
 export const SMS_TEXT_NUMBER_E164 = "+13049879470";
