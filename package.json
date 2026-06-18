@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start -p ${PORT:-3000}",
+    "start": "NODE_OPTIONS=--dns-result-order=ipv4first next start -p ${PORT:-3000}",
     "lint": "eslint"
   },
   "dependencies": {
